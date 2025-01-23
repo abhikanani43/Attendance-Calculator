@@ -1,0 +1,86 @@
+import { useState } from 'react'
+import { Input } from "/components/ui/input"
+import { Label } from "/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "/components/ui/card"
+import { Button } from "/components/ui/button"
+import { Check, X } from "lucide-react"
+
+export default function AttendanceCalculator() {
+  const [totalClasses, setTotalClasses] = useState<number | ''>('')
+  const [classesAttended, setClassesAttended] = useState<number | ''>('')
+  const [attendancePercentage, setAttendancePercentage] = useState<number | null>(null)
+  const [isEligible, setIsEligible] = useState<boolean | null>(null)
+
+  const threshold = 75
+
+  const calculateAttendance = () => {
+    if (typeof totalClasses === 'number' && typeof classesAttended === 'number' && totalClasses > 0) {
+      const percentage = (classesAttended / totalClasses) * 100
+      setAttendancePercentage(percentage)
+      setIsEligible(percentage >= threshold)
+    } else {
+      setAttendancePercentage(null)
+      setIsEligible(null)
+    }
+  }
+
+  return (
+    <Card className="w-full max-w-md mx-auto mt-10">
+      <CardHeader>
+        <CardTitle>Attendance Calculator</CardTitle>
+        <CardDescription>Enter your total classes and classes attended to check your attendance percentage and exam eligibility.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="total-classes">Total Classes</Label>
+          <Input
+            id="total-classes"
+            type="number"
+            value={totalClasses}
+            onChange={(e) => setTotalClasses(Number(e.target.value))}
+            placeholder="Enter total classes"
+            className="w-full"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="classes-attended">Classes Attended</Label>
+          <Input
+            id="classes-attended"
+            type="number"
+            value={classesAttended}
+            onChange={(e) => setClassesAttended(Number(e.target.value))}
+            placeholder="Enter classes attended"
+            className="w-full"
+          />
+        </div>
+        <Button onClick={calculateAttendance} className="w-full">
+          Calculate
+        </Button>
+        {attendancePercentage !== null && (
+          <div className="mt-4 space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-lg font-semibold">Attendance Percentage</p>
+              <p className="text-lg font-semibold">{attendancePercentage.toFixed(2)}%</p>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-lg font-semibold">Exam Eligibility</p>
+              {isEligible !== null ? (
+                isEligible ? (
+                  <div className="flex items-center text-green-500">
+                    <Check className="mr-2 h-4 w-4" /> Eligible
+                  </div>
+                ) : (
+                  <div className="flex items-center text-red-500">
+                    <X className="mr-2 h-4 w-4" /> Not Eligible
+                  </div>
+                )
+              ) : (
+                <p className="text-lg font-semibold">N/A</p>
+              )}
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
