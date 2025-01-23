@@ -1,3 +1,5 @@
+Description:
+
 The Attendance Calculator is a simple web application built with React and TypeScript. This tool allows students to quickly calculate their attendance percentage based on the total number of classes and the number of classes attended. It also checks if the student meets the required attendance threshold (75%) for exam eligibility.
 
 This project is intended for anyone who wants to track their attendance and determine if they are eligible for exams based on their participation in classes.
